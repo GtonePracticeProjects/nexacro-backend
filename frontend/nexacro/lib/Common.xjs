@@ -1,0 +1,49 @@
+//==============================================================================
+// Common.xjs : 화면 공통 스크립트.  각 Form 에서  include "lib::Common.xjs";  로 포함한다.
+// (Nexacro Studio 에서 열어 검증하지 않은 텍스트 소스)
+//==============================================================================
+
+/**
+ * 공통 트랜잭션 래퍼.
+ * 모든 화면이 this.transaction() 을 직접 부르지 않고 이 함수를 거치면
+ * 오류(ErrorCode < 0) 공통 처리 / 로딩 표시 등을 한 곳에서 할 수 있다.
+ *
+ * @param sSvcId    서비스ID (콜백에서 구분용)
+ * @param sUrl      "svc::..." 형태의 호출 URL
+ * @param sInDs     "서버Dataset=클라이언트Dataset ..." (서버로 보낼 Dataset)
+ * @param sOutDs    "클라이언트Dataset=서버Dataset ..." (서버에서 받을 Dataset)
+ * @param sArgs     "name=value ..." 형태의 Variable
+ * @param sCallback 업무 콜백 함수명 (문자열)
+ * @param bAsync    비동기 여부 (기본 true)
+ */
+this.gfnTransaction = function(sSvcId, sUrl, sInDs, sOutDs, sArgs, sCallback, bAsync)
+{
+    if (bAsync == undefined || bAsync == null) {
+        bAsync = true;
+    }
+    if (this._gfnCbMap == undefined) {
+        this._gfnCbMap = {};
+    }
+    this._gfnCbMap[sSvcId] = sCallback;
+
+    this.transaction(sSvcId, sUrl, sInDs, sOutDs, sArgs, "gfnCallback", bAsync);
+};
+
+/** gfnTransaction 의 공통 콜백: 오류면 메시지 표시 후 종료, 정상이면 업무 콜백 호출 */
+this.gfnCallback = function(sSvcId, nErrorCode, sErrorMsg)
+{
+    if (nErrorCode < 0) {
+        this.alert("[" + nErrorCode + "] " + sErrorMsg);
+        return;
+    }
+    var sCallback = this._gfnCbMap[sSvcId];
+    if (sCallback) {
+        this[sCallback](sSvcId, nErrorCode, sErrorMsg);
+    }
+};
+
+/** 문자열이 null / undefined / 공백이면 true */
+this.gfnIsNull = function(sValue)
+{
+    return (sValue == undefined || sValue == null || String(sValue).trim().length == 0);
+};

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="MenuForm" width="1100" height="40" titletext="Menu">
+    <Layouts>
+      <Layout width="1100" height="40">
+        <Button id="btnAccount" left="10" top="6" width="120" height="28" text="계좌/이체" onclick="btnMenu_onclick"/>
+        <Button id="btnCustomer" left="140" top="6" width="120" height="28" text="고객" onclick="btnMenu_onclick"/>
+        <Button id="btnLoan" left="270" top="6" width="120" height="28" text="대출" onclick="btnMenu_onclick"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[
+this.btnMenu_onclick = function(obj, e)
+{
+    var oFrame = nexacro.getApplication().mainframe.vfrmMain.frmWork;
+    if (obj.id == "btnAccount")       oFrame.set_formurl("frm::AccountForm.xfdl");
+    else if (obj.id == "btnCustomer") oFrame.set_formurl("frm::CustomerForm.xfdl");
+    else if (obj.id == "btnLoan")     oFrame.set_formurl("frm::LoanForm.xfdl");
+};
+]]></Script>
+  </Form>
+</FDL>

@@ -1,0 +1,10 @@
+screen_file,call_style,service_id,url,input_dataset,output_dataset,controller_method,url_expression
+frontend/nexacro/form/AccountForm.xfdl,direct,selectAccountList,/nexacro/account/selectAccountList.do,,dsAccount=dsAccount,AccountNexacroController#selectAccountList,"""svc::nexacro/account/selectAccountList.do"""
+frontend/nexacro/form/AccountForm.xfdl,wrapper,selectAccount,/nexacro/account/selectAccount.do,dsCond=dsCond,dsAccountDetail=dsAccount;dsHist=dsHist,AccountNexacroController#selectAccount,"""svc::nexacro/account/selectAccount.do"""
+frontend/nexacro/form/AccountForm.xfdl,wrapper,transfer,/nexacro/account/transfer.do,dsTransfer=dsTransfer,,AccountNexacroController#transfer,"""svc::nexacro/account/transfer.do"""
+frontend/nexacro/form/CustomerForm.xfdl,direct,selectCustomerList,/nexacro/customer/selectCustomerList.do,dsCond=dsCond,dsCustomer=dsCustomer,CustomerNexacroController#selectCustomerList,"""svc::nexacro/customer/selectCustomerList.do"""
+frontend/nexacro/form/CustomerForm.xfdl,wrapper,registerCustomer,/nexacro/customer/registerCustomer.do,dsCustomer=dsNewCustomer,,CustomerNexacroController#registerCustomer,"""svc::nexacro/customer/registerCustomer.do"""
+frontend/nexacro/form/LoanForm.xfdl,wrapper,selectLoanList,/nexacro/loan/selectLoanList.do,dsCond=dsCond,dsLoan=dsLoan,LoanNexacroController#selectLoanList,"""svc::nexacro/loan/selectLoanList.do"""
+frontend/nexacro/form/LoanForm.xfdl,direct,applyLoan,/nexacro/loan/applyLoan.do,dsApply=dsApply,,LoanNexacroController#applyLoan,"""svc::nexacro/loan/applyLoan.do"""
+frontend/nexacro/form/LoanForm.xfdl,concatenated,decideLoan,/nexacro/loan/approveLoan.do,dsDecide=dsDecide,,LoanNexacroController#approveLoan,"""svc::nexacro/loan/"" + sAct + ""Loan.do"" (sAct=approve)"
+frontend/nexacro/form/LoanForm.xfdl,concatenated,decideLoan,/nexacro/loan/rejectLoan.do,dsDecide=dsDecide,,LoanNexacroController#rejectLoan,"""svc::nexacro/loan/"" + sAct + ""Loan.do"" (sAct=reject)"

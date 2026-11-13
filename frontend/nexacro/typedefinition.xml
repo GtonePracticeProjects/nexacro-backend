@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Nexacro N typedefinition (hand-written text source; NOT opened in Nexacro Studio).
+  svc : 백엔드(Spring MVC) 호출용 서비스 프리픽스.  svc::nexacro/account/x.do  ->  http://localhost:8080/bank/nexacro/account/x.do
+  lib : 공통 스크립트(.xjs)   frm : 화면(.xfdl)
+-->
+<TypeDefinition version="2.1">
+  <Services>
+    <Service prefixid="svc" type="JSP" url="http://localhost:8080/bank/" cachelevel="none" codepage="utf-8" language="ko" version="0.0"/>
+    <Service prefixid="lib" type="js" url="./lib/" cachelevel="session" codepage="utf-8" language="ko" version="0.0"/>
+    <Service prefixid="frm" type="form" url="./form/" cachelevel="session" codepage="utf-8" language="ko" version="0.0"/>
+  </Services>
+</TypeDefinition>

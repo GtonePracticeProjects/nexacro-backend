@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="CustomerForm" width="1100" height="740" titletext="고객 조회 / 등록" onload="CustomerForm_onload">
+    <Layouts>
+      <Layout width="1100" height="740">
+        <Static id="staKeyword" left="10" top="10" width="80" height="26" text="검색어"/>
+        <Edit id="edtKeyword" left="90" top="10" width="240" height="26"/>
+        <Button id="btnSearch" left="340" top="10" width="90" height="26" text="조회" onclick="btnSearch_onclick"/>
+        <Grid id="grdCustomer" left="10" top="46" width="1070" height="300" binddataset="dsCustomer">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="120"/><Column size="200"/><Column size="180"/><Column size="260"/><Column size="180"/>
+              </Columns>
+              <Rows><Row size="26" band="head"/><Row size="26"/></Rows>
+              <Band id="head">
+                <Cell text="고객번호"/><Cell col="1" text="고객명"/><Cell col="2" text="전화번호"/><Cell col="3" text="이메일"/><Cell col="4" text="등록일"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:custNo"/><Cell col="1" text="bind:custNm"/><Cell col="2" text="bind:phone"/><Cell col="3" text="bind:email"/><Cell col="4" text="bind:regDt"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+
+        <Static id="staNew" left="10" top="370" width="300" height="24" text="신규 고객 등록"/>
+        <Static id="staNm" left="10" top="402" width="70" height="26" text="고객명"/>
+        <Edit id="edtNm" left="80" top="402" width="180" height="26"/>
+        <Static id="staPhone" left="280" top="402" width="70" height="26" text="전화번호"/>
+        <Edit id="edtPhone" left="350" top="402" width="180" height="26"/>
+        <Static id="staEmail" left="550" top="402" width="60" height="26" text="이메일"/>
+        <Edit id="edtEmail" left="610" top="402" width="260" height="26"/>
+        <Button id="btnRegister" left="990" top="402" width="90" height="26" text="등록" onclick="btnRegister_onclick"/>
+      </Layout>
+    </Layouts>
+    <Objects>
+      <Dataset id="dsCustomer">
+        <ColumnInfo>
+          <Column id="custNo" type="STRING" size="20"/>
+          <Column id="custNm" type="STRING" size="100"/>
+          <Column id="phone" type="STRING" size="30"/>
+          <Column id="email" type="STRING" size="100"/>
+          <Column id="regDt" type="STRING" size="14"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="dsCond">
+        <ColumnInfo><Column id="keyword" type="STRING" size="100"/></ColumnInfo>
+      </Dataset>
+      <Dataset id="dsNewCustomer">
+        <ColumnInfo>
+          <Column id="custNm" type="STRING" size="100"/>
+          <Column id="phone" type="STRING" size="30"/>
+          <Column id="email" type="STRING" size="100"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+    <Bind>
+      <BindItem id="bindKeyword" compid="edtKeyword" propid="value" datasetid="dsCond" columnid="keyword"/>
+      <BindItem id="bindNm" compid="edtNm" propid="value" datasetid="dsNewCustomer" columnid="custNm"/>
+      <BindItem id="bindPhone" compid="edtPhone" propid="value" datasetid="dsNewCustomer" columnid="phone"/>
+      <BindItem id="bindEmail" compid="edtEmail" propid="value" datasetid="dsNewCustomer" columnid="email"/>
+    </Bind>
+    <Script type="xscript5.1"><![CDATA[
+include "lib::Common.xjs";
+
+this.CustomerForm_onload = function(obj, e)
+{
+    this.dsCond.addRow();
+    this.dsNewCustomer.addRow();
+    this.fn_search();
+};
+
+this.btnSearch_onclick = function(obj, e)
+{
+    this.fn_search();
+};
+
+// [direct] 고객 검색 : this.transaction 직접 호출
+this.fn_search = function()
+{
+    this.transaction(
+        "selectCustomerList",
+        "svc::nexacro/customer/selectCustomerList.do",
+        "dsCond=dsCond",
+        "dsCustomer=dsCustomer",
+        "",
+        "fn_callback"
+    );
+};
+
+// [wrapper] 고객 등록 : 클라이언트 dsNewCustomer 를 서버 dsCustomer 로 전송
+this.btnRegister_onclick = function(obj, e)
+{
+    if (this.gfnIsNull(this.dsNewCustomer.getColumn(0, "custNm"))) {
+        this.alert("고객명을 입력하세요.");
+        return;
+    }
+    this.gfnTransaction(
+        "registerCustomer",
+        "svc::nexacro/customer/registerCustomer.do",
+        "dsCustomer=dsNewCustomer",
+        "",
+        "",
+        "fn_callback"
+    );
+};
+
+this.fn_callback = function(sSvcId, nErrorCode, sErrorMsg)
+{
+    if (nErrorCode < 0) {
+        this.alert("[" + nErrorCode + "] " + sErrorMsg);
+        return;
+    }
+    if (sSvcId == "registerCustomer") {
+        this.alert("고객이 등록되었습니다.");
+        this.dsNewCustomer.clearData();
+        this.dsNewCustomer.addRow();
+        this.fn_search();
+    }
+};
+]]></Script>
+  </Form>
+</FDL>

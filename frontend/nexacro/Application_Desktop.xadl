@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ADL version="2.0">
+  <Application id="BankApp" screenid="Desktop_screen" onload="Application_onload">
+    <Layout>
+      <MainFrame id="mainframe" showtitlebar="true" showstatusbar="false" titletext="Bank Nexacro Sample" width="1100" height="780">
+        <VFrameSet id="vfrmMain" separatesize="0,*" showtitlebar="false">
+          <Frames>
+            <ChildFrame id="frmMenu" formurl="frm::MenuForm.xfdl" showtitlebar="false"/>
+            <ChildFrame id="frmWork" formurl="frm::AccountForm.xfdl" showtitlebar="false"/>
+          </Frames>
+        </VFrameSet>
+      </MainFrame>
+    </Layout>
+    <Script type="xscript5.1"><![CDATA[
+this.Application_onload = function(obj, e)
+{
+    // 화면 이동은 MenuForm 에서 frmWork 의 formurl 을 바꾸는 방식으로 처리한다.
+};
+]]></Script>
+  </Application>
+</ADL>
